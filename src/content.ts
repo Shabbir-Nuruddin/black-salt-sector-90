@@ -27,7 +27,7 @@ export const SITE: Site = {
     weight: 700,
     upper: false,
   },
-  scene: "salt",
+  scene: "celebration",
   align: "left",
   hero: {
     title: [
@@ -39,6 +39,7 @@ export const SITE: Site = {
       hi: "गूगल पर 1,254 रिव्यू से 4.6। नॉर्थ इंडियन खाना, बार, लाइव म्यूज़िक और सफ़ायर 90 मॉल में ग्लास-हाउस डाइनिंग।",
     },
     fallback: "/img/p1.jpg",
+    backdrop: "/img/p1.jpg",
   },
   marquee: ["Paneer Tikka Masala", "Palak Lahsuni", "Tandoori Sizzler", "Dal Tadka", "Garlic Naan", "Rara Chicken", "Kadhai Mushroom", "Fruit Punch", "Crispy Corn"],
   dishes: {
@@ -86,6 +87,7 @@ export const SITE: Site = {
   },
   reviews: {
     title: { en: "Guests name the people who served them", hi: "मेहमान अपने सर्वर का नाम लेकर तारीफ़ करते हैं" },
+    bg: "/img/p5.jpg",
     rating: 4.6,
     dist: [1012, 104, 45, 21, 72],
     quotes: [

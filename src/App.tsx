@@ -54,6 +54,7 @@ export default function App() {
   const copyY = useTransform(scrollYProgress, [0, 0.85], [0, -60]);
   const cueOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
   const right = SITE.align === "right";
+  const photo = SITE.hero.backdrop;
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -99,7 +100,19 @@ export default function App() {
       {/* hero: the scene stays pinned while the first scroll drives it */}
       <section id="top" ref={stage} className="relative h-[175svh]">
         <div className="sticky top-0 h-[100dvh] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_10%,var(--bg2),var(--bg)_70%)]" />
+          {photo ? (
+            <motion.img
+              src={photo}
+              alt=""
+              aria-hidden
+              initial={reduced ? false : { scale: 1.14, opacity: 0 }}
+              animate={{ scale: 1.04, opacity: 1 }}
+              transition={{ duration: 2.4, ease: EASE }}
+              className="absolute inset-0 h-full w-full object-cover blur-[3px] brightness-[0.55]"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_10%,var(--bg2),var(--bg)_70%)]" />
+          )}
           <div className="absolute inset-0">
             <SceneBoundary>
               <Suspense fallback={null}>
@@ -108,9 +121,13 @@ export default function App() {
             </SceneBoundary>
           </div>
           <div
-            className={`pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--bg)_20%,transparent_60%)] ${right ? "md:bg-[linear-gradient(to_left,var(--bg)_20%,transparent_62%)]" : "md:bg-[linear-gradient(to_right,var(--bg)_20%,transparent_62%)]"}`}
+            className={
+              photo
+                ? `pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--bg)_14%,color-mix(in_oklab,var(--bg)_55%,transparent)_42%,transparent_62%)] ${right ? "md:bg-[linear-gradient(to_left,color-mix(in_oklab,var(--bg)_88%,transparent)_8%,color-mix(in_oklab,var(--bg)_45%,transparent)_40%,transparent_58%)]" : "md:bg-[linear-gradient(to_right,color-mix(in_oklab,var(--bg)_88%,transparent)_8%,color-mix(in_oklab,var(--bg)_45%,transparent)_40%,transparent_58%)]"}`
+                : `pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--bg)_20%,transparent_60%)] ${right ? "md:bg-[linear-gradient(to_left,var(--bg)_20%,transparent_62%)]" : "md:bg-[linear-gradient(to_right,var(--bg)_20%,transparent_62%)]"}`
+            }
           />
-          <div className="grain pointer-events-none absolute inset-0 opacity-70 mix-blend-overlay" />
+          <div className={`grain pointer-events-none absolute inset-0 mix-blend-overlay ${photo ? "opacity-40" : "opacity-70"}`} />
 
           <motion.div
             style={reduced ? undefined : { opacity: copyOpacity, y: copyY }}
@@ -137,10 +154,11 @@ export default function App() {
                 <WaButton label={t.whatsapp} text={wa} />
                 <DirectionsButton label={t.directions} className="hidden sm:inline-flex" />
               </motion.div>
-              {fine && !reduced && <p className="mt-6 hidden text-[13px] text-ink-3 md:block">{t.drag}</p>}
+              {fine && !reduced && !photo && <p className="mt-6 hidden text-[13px] text-ink-3 md:block">{t.drag}</p>}
             </div>
           </motion.div>
 
+          {photo && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg to-transparent" />}
           <motion.div style={{ opacity: cueOpacity }} className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[12px] tracking-[0.2em] text-ink-3 md:flex">
             {t.scroll.toUpperCase()}
             <span className="block h-10 w-px overflow-hidden bg-line">

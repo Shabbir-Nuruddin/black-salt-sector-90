@@ -129,7 +129,13 @@ export function Reviews({ lang, reduced, index }: P) {
   const t = UI[lang];
   const total = r.dist.reduce((a, b) => a + b, 0);
   return (
-    <section className="py-20 lg:py-32">
+    <section className="relative overflow-hidden py-20 lg:py-32">
+      {r.bg && (
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <img src={r.bg} alt="" loading="lazy" className="h-full w-full object-cover opacity-30 blur-[2px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--bg),color-mix(in_oklab,var(--bg)_55%,transparent)_30%,color-mix(in_oklab,var(--bg)_55%,transparent)_70%,var(--bg))]" />
+        </div>
+      )}
       <div className={`${WRAP} grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20`}>
         <div className="lg:sticky lg:top-28 lg:self-start">
           <Heading index={index} title={bi(r.title, lang)} reduced={reduced} />

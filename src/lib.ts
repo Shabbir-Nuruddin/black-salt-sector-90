@@ -1,6 +1,6 @@
 export type Lang = "en" | "hi";
 export type Bi = { en: string; hi: string };
-export type SceneKey = "salt" | "lanterns" | "tandoor" | "imarti" | "samosa" | "handi" | "chulha" | "road" | "cup" | "thali";
+export type SceneKey = "salt" | "lanterns" | "tandoor" | "imarti" | "samosa" | "handi" | "chulha" | "road" | "cup" | "thali" | "celebration";
 export type SectionKey = "dishes" | "gallery" | "feature" | "reviews" | "visit";
 /** Opening hours per weekday, Sunday first, as [open, close] in decimal hours. Close may pass 24 (1 AM = 25). */
 export type Hours = [number, number][];
@@ -39,12 +39,12 @@ export type Site = {
   theme: Theme;
   scene: SceneKey;
   align: "left" | "right";
-  hero: { title: [Bi, Bi]; proof: Bi; fallback: string };
+  hero: { title: [Bi, Bi]; proof: Bi; fallback: string; /** Full-bleed restaurant photo behind a photoreal scene. */ backdrop?: string };
   marquee: string[];
   dishes: { title: Bi; body: Bi; layout: "list" | "cards"; items: Dish[] };
   gallery: { title: Bi; layout: "strip" | "mosaic"; photos: Photo[] };
   feature: Feature;
-  reviews: { title: Bi; rating: number; dist: [number, number, number, number, number]; quotes: Review[] };
+  reviews: { title: Bi; rating: number; dist: [number, number, number, number, number]; quotes: Review[]; /** Optional photo washed behind the section. */ bg?: string };
   visit: { title: Bi; img: string; alt: string; address: Bi; note?: Bi };
   waHello: Bi;
   order: SectionKey[];
