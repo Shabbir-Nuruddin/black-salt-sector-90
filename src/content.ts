@@ -1,0 +1,112 @@
+import "@fontsource/bricolage-grotesque/600.css";
+import "@fontsource/bricolage-grotesque/700.css";
+import type { Site } from "./lib";
+
+export const SITE: Site = {
+  name: "The Black Salt",
+  sub: { en: "Restaurant & Bar · Sapphire 90, Sector 90", hi: "रेस्टोरेंट और बार · सफ़ायर 90, सेक्टर 90" },
+  banner: { en: "Birthdays, roka, baby showers: call ahead and the team plans it with you", hi: "बर्थडे, रोका, बेबी शावर: पहले कॉल करें, टीम साथ मिलकर तैयारी करती है" },
+  phone: "919319080715",
+  phoneDisplay: "+91 93190 80715",
+  lat: 28.4039087,
+  lon: 76.9364818,
+  hours: [[11, 23], [11, 23], [11, 23], [11, 23], [11, 23], [11, 23], [11, 23]],
+  price: { en: "₹400–1,200 per person", hi: "₹400–1,200 प्रति व्यक्ति" },
+  theme: {
+    dark: true,
+    bg: "#0e0b0c",
+    bg2: "#181214",
+    panel: "#1e171a",
+    ink: "#f7eef0",
+    ink2: "#cbbbc0",
+    ink3: "#8f7e83",
+    line: "#30262a",
+    accent: "#e7a3b1",
+    onAccent: "#2a0d14",
+    display: "Bricolage Grotesque",
+    weight: 700,
+    upper: false,
+  },
+  scene: "salt",
+  align: "left",
+  hero: {
+    title: [
+      { en: "Dinner that turns", hi: "डिनर जो बन जाए" },
+      { en: "into a celebration.", hi: "एक जश्न।" },
+    ],
+    proof: {
+      en: "4.6 on Google from 1,254 reviews. North Indian, a bar, live music and a glass-house dining room at Sapphire 90 Mall.",
+      hi: "गूगल पर 1,254 रिव्यू से 4.6। नॉर्थ इंडियन खाना, बार, लाइव म्यूज़िक और सफ़ायर 90 मॉल में ग्लास-हाउस डाइनिंग।",
+    },
+    fallback: "/img/p1.jpg",
+  },
+  marquee: ["Paneer Tikka Masala", "Palak Lahsuni", "Tandoori Sizzler", "Dal Tadka", "Garlic Naan", "Rara Chicken", "Kadhai Mushroom", "Fruit Punch", "Crispy Corn"],
+  dishes: {
+    title: { en: "What guests keep ordering", hi: "मेहमान बार-बार क्या मंगाते हैं" },
+    body: { en: "Every line below is lifted word for word from a Google review.", hi: "नीचे की हर लाइन गूगल रिव्यू से ज्यों की त्यों ली गई है।" },
+    layout: "list",
+    items: [
+      { name: { en: "Paneer Tikka Masala", hi: "पनीर टिक्का मसाला" }, quote: "Must visit if you are looking for North indian food with beers. I had paneer tikka masala and it was good.", img: "/img/p14.jpg" },
+      { name: { en: "Palak Lahsuni", hi: "पालक लहसुनी" }, quote: "Food was delicious one of dish palak lahsuni was so tasty.", img: "/img/p14.jpg" },
+      { name: { en: "Tandoori Sizzler Platter", hi: "तंदूरी सिज़लर प्लैटर" }, quote: "We ordered tandoori sizzler platter, kadi mushroom, daal tadka, garlic naan and tandoori roti. Quantity and quality is good."},
+      { name: { en: "Paneer Butter Masala", hi: "पनीर बटर मसाला" }, quote: "My paneer butter masala was great, tasted very fresh and not too spicy. Naans’ were amazing too.", img: "/img/p14.jpg" },
+      { name: { en: "Rara Chicken", hi: "रारा चिकन" }, quote: "Rara chicken is also the best that i have tried."},
+      { name: { en: "Fruit Punch", hi: "फ्रूट पंच" }, quote: "food is too good in taste specially the veg platter sizzler and the drink fruit punch", img: "/img/p4.jpg" },
+    ],
+  },
+  gallery: {
+    title: { en: "Inside Black Salt", hi: "ब्लैक सॉल्ट के अंदर" },
+    layout: "mosaic",
+    photos: [
+      { src: "/img/p1.jpg", alt: "Dining room at The Black Salt", wide: true },
+      { src: "/img/p2.jpg", alt: "Live music with a guitarist" },
+      { src: "/img/p11.jpg", alt: "Flower-lined balcony" },
+      { src: "/img/p6.jpg", alt: "Entrance decorated with flowers" },
+      { src: "/img/p8.jpg", alt: "Interior decor" },
+      { src: "/img/p5.jpg", alt: "Dining tables", wide: true },
+      { src: "/img/p3.jpg", alt: "Cafe corner" },
+      { src: "/img/p9.jpg", alt: "The Black Salt sign" },
+    ],
+  },
+  feature: {
+    kind: "occasions",
+    title: { en: "The parties people write home about", hi: "ऐसी पार्टियां जिनके बारे में लोग लिखते हैं" },
+    body: {
+      en: "Decoration, menu, music and a team that stays with your table. Here is what hosts said afterwards.",
+      hi: "सजावट, मेन्यू, म्यूज़िक और पूरी शाम साथ रहने वाली टीम। मेज़बानों ने बाद में यह लिखा।",
+    },
+    img: "/img/p12.jpg",
+    items: [
+      { label: { en: "Kids’ birthdays", hi: "बच्चों का बर्थडे" }, quote: "The whole team of black salt including Anil ji, helped us with the meticulous planning which included things like decoration, set up, food menu, presentations & music." },
+      { label: { en: "Baby shower", hi: "बेबी शावर" }, quote: "We hosted our Baby Shower and loved the hospitality of BlackSalt. They helped us in decoration as well as in menu selection." },
+      { label: { en: "Roka", hi: "रोका" }, quote: "Good food, ambience and absolutely lovely staff especially their manager Pankaj who handled my Roka function very well and professionally!" },
+      { label: { en: "Anniversary", hi: "एनिवर्सरी" }, quote: "We had an our anniversary party at this restaurant. Ambience is awesome with slow music." },
+      { label: { en: "Big tables", hi: "बड़े ग्रुप" }, quote: "We had a dinner reservation of 14 people. The restaurant was really nice in accommodating us even though we were 1 hour late." },
+    ],
+  },
+  reviews: {
+    title: { en: "Guests name the people who served them", hi: "मेहमान अपने सर्वर का नाम लेकर तारीफ़ करते हैं" },
+    rating: 4.6,
+    dist: [1012, 104, 45, 21, 72],
+    quotes: [
+      { quote: "A special thanks to Vandana Rana, who hosted our table with exceptional care and attention throughout the evening.", stars: 5 },
+      { quote: "Was hosted by Sheetal. So warm and compassionate of a waitress. Would like to be hosted by her over again.", stars: 5 },
+      { quote: "A special thanks to Rajiv Goel for his exceptional customer service. He was polite, attentive, and made sure we were comfortable throughout our visit.", stars: 5 },
+      { quote: "The best thing about the restaurant was the staff, specially Anjali and Sheetal were very co-operative and polite. Food was yummy. 10 on 10", stars: 5 },
+      { quote: "Especially enjoyed the outdoor dining area since the weather was nice and the view was great.", stars: 5 },
+      { quote: "Food remains pretty good. I have been a frequent customer here. Family dining is really good.", stars: 4 },
+    ],
+  },
+  visit: {
+    title: { en: "Find us at Sapphire 90", hi: "सफ़ायर 90 में मिलिए" },
+    img: "/img/p13.jpg",
+    alt: "The Black Salt storefront inside Sapphire 90 Mall",
+    address: { en: "Sapphire 90 Mall, Sector 90, Gurugram", hi: "सफ़ायर 90 मॉल, सेक्टर 90, गुरुग्राम" },
+    note: { en: "Free parking right outside the complex. Reservations recommended for dinner.", hi: "कॉम्प्लेक्स के बाहर फ़्री पार्किंग। डिनर के लिए पहले बुकिंग करें।" },
+  },
+  waHello: {
+    en: "Hi Black Salt, I'd like to book a table / plan a party. Date: , people: ",
+    hi: "नमस्ते ब्लैक सॉल्ट, मुझे टेबल बुक करनी है / पार्टी प्लान करनी है। तारीख़: , लोग: ",
+  },
+  order: ["dishes", "feature", "gallery", "reviews", "visit"],
+};
