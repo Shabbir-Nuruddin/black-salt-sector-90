@@ -27,7 +27,7 @@ export const SITE: Site = {
     weight: 700,
     upper: false,
   },
-  scene: "celebration",
+  scene: "pour",
   align: "left",
   hero: {
     title: [
@@ -40,6 +40,32 @@ export const SITE: Site = {
     },
     fallback: "/img/p1.jpg",
     backdrop: "/img/p1.jpg",
+  },
+  pour: { from: "jug", into: "glass", liquid: "#d9452f", foam: "#f4a487", thick: 1, ice: true, lime: true, extras: "candles" },
+  story: [
+    { kicker: { en: "The drink", hi: "ड्रिंक" }, title: { en: "Start with the fruit punch.", hi: "शुरुआत फ्रूट पंच से।" }, quote: "food is too good in taste specially the veg platter sizzler and the drink fruit punch" },
+    { kicker: { en: "The room", hi: "माहौल" }, title: { en: "Slow music, long evenings.", hi: "धीमा म्यूज़िक, लंबी शामें।" }, quote: "We had an our anniversary party at this restaurant. Ambience is awesome with slow music." },
+    { kicker: { en: "The table", hi: "टेबल" }, title: { en: "Bring all fourteen of you.", hi: "चौदह लोग भी आइए।" }, quote: "We had a dinner reservation of 14 people. The restaurant was really nice in accommodating us even though we were 1 hour late." },
+  ],
+  build: {
+    title: { en: "Plan your evening in four taps", hi: "चार टैप में अपनी शाम प्लान करें" },
+    body: { en: "Pick the occasion, the dishes you have your eye on, and when. It lands on the team's WhatsApp exactly as you see it.", hi: "मौका, पसंदीदा डिश और समय चुनें। मैसेज टीम के व्हाट्सऐप पर ठीक ऐसे ही पहुंचेगा।" },
+    pick: { label: { en: "Occasion", hi: "मौका" }, options: [
+      { name: { en: "Dinner", hi: "डिनर" }, note: { en: "A table for the evening", hi: "शाम के लिए टेबल" } },
+      { name: { en: "Birthday", hi: "बर्थडे" }, note: { en: "Decoration and set-up planned with you", hi: "सजावट और सेटअप आपके साथ" } },
+      { name: { en: "Anniversary / Roka", hi: "एनिवर्सरी / रोका" }, note: { en: "The team handles the function", hi: "फ़ंक्शन टीम संभालती है" } },
+    ] },
+    items: [
+      { en: "Paneer Tikka Masala", hi: "पनीर टिक्का मसाला" },
+      { en: "Palak Lahsuni", hi: "पालक लहसुनी" },
+      { en: "Tandoori Sizzler Platter", hi: "तंदूरी सिज़लर प्लैटर" },
+      { en: "Rara Chicken", hi: "रारा चिकन" },
+      { en: "Paneer Butter Masala", hi: "पनीर बटर मसाला" },
+      { en: "Fruit Punch", hi: "फ्रूट पंच" },
+    ],
+    people: true,
+    when: true,
+    hello: { en: "Hi Black Salt, I'd like to book:", hi: "नमस्ते ब्लैक सॉल्ट, मुझे बुक करना है:" },
   },
   marquee: ["Paneer Tikka Masala", "Palak Lahsuni", "Tandoori Sizzler", "Dal Tadka", "Garlic Naan", "Rara Chicken", "Kadhai Mushroom", "Fruit Punch", "Crispy Corn"],
   dishes: {
@@ -110,5 +136,5 @@ export const SITE: Site = {
     en: "Hi Black Salt, I'd like to book a table / plan a party. Date: , people: ",
     hi: "नमस्ते ब्लैक सॉल्ट, मुझे टेबल बुक करनी है / पार्टी प्लान करनी है। तारीख़: , लोग: ",
   },
-  order: ["dishes", "feature", "gallery", "reviews", "visit"],
+  order: ["build", "dishes", "feature", "gallery", "reviews", "visit"],
 };

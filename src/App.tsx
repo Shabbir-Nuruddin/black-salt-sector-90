@@ -1,15 +1,42 @@
 import { Component, Fragment, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { WhatsappLogo } from "@phosphor-icons/react";
 import { SITE } from "./content";
-import { UI, bi, fmtHour, openState, type Lang, type SectionKey } from "./lib";
+import { UI, bi, fmtHour, openState, type Chapter, type Lang, type SectionKey } from "./lib";
 import { SCENES } from "./scenes";
 import { LangToggle } from "./components/LangToggle";
 import { Dishes, Gallery, Reviews, Visit } from "./components/Sections";
 import { Feature } from "./components/Feature";
+import { Build } from "./components/Build";
 import { CallButton, DirectionsButton, EASE, WaButton, waLink } from "./components/ui";
 
 const Scene = SCENES[SITE.scene];
+const STORY = SITE.story ?? [];
+// the story chapters share the stretch after the hero copy has gone
+const SPAN: [number, number] = [0.2, 0.96];
+
+/** One scroll chapter beside the pour: it rises in, holds, and hands over to the next. */
+function StoryChapter({ c, i, progress, lang, right }: { c: Chapter; i: number; progress: MotionValue<number>; lang: Lang; right: boolean }) {
+  const w = (SPAN[1] - SPAN[0]) / STORY.length;
+  const a = SPAN[0] + i * w;
+  const b = a + w;
+  const last = i === STORY.length - 1;
+  const opacity = useTransform(progress, last ? [a, a + 0.04, 1] : [a, a + 0.04, b - 0.04, b], last ? [0, 1, 1] : [0, 1, 1, 0]);
+  const y = useTransform(progress, [a, a + 0.06, b], [40, 0, -30]);
+  return (
+    <motion.div data-chapter style={{ opacity, y }} className={`absolute inset-x-0 bottom-0 max-w-[560px] md:max-w-[460px] md:bottom-auto md:top-1/2 md:-translate-y-1/2 ${right ? "md:left-auto md:right-0 md:text-right" : ""}`}>
+      <p className="mb-4 text-[13px] font-semibold tracking-[0.2em] text-accent">
+        <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span> · {bi(c.kicker, lang).toUpperCase()}
+      </p>
+      <h2 className="font-display text-[clamp(2.4rem,6vw,5rem)] leading-[0.95] tracking-[-0.02em] text-balance">{bi(c.title, lang)}</h2>
+      {c.quote && (
+        <p className={`mt-5 max-w-[40ch] border-l-2 border-accent pl-4 text-[18px] leading-snug text-ink-2 ${right ? "md:ml-auto md:border-l-0 md:border-r-2 md:pl-0 md:pr-4" : ""}`}>
+          “{c.quote}”<span className="mt-1.5 block text-[12px] text-ink-3">{UI[lang].googleReview}</span>
+        </p>
+      )}
+    </motion.div>
+  );
+}
 
 class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -50,9 +77,10 @@ export default function App() {
   const state = openState(SITE.hours, now);
   const stage = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: stage, offset: ["start start", "end end"] });
-  const copyOpacity = useTransform(scrollYProgress, [0, 0.55, 0.85], [1, 1, 0]);
-  const copyY = useTransform(scrollYProgress, [0, 0.85], [0, -60]);
-  const cueOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const story = STORY.length > 0;
+  const copyOpacity = useTransform(scrollYProgress, story ? [0, 0.1, 0.17] : [0, 0.55, 0.85], [1, 1, 0]);
+  const copyY = useTransform(scrollYProgress, story ? [0, 0.17] : [0, 0.85], [0, -60]);
+  const cueOpacity = useTransform(scrollYProgress, [0, story ? 0.08 : 0.12], [1, 0]);
   const right = SITE.align === "right";
   const photo = SITE.hero.backdrop;
 
@@ -74,6 +102,7 @@ export default function App() {
     feature: () => <Feature lang={lang} reduced={reduced} index={idx()} />,
     reviews: () => <Reviews lang={lang} reduced={reduced} index={idx()} />,
     visit: () => <Visit lang={lang} reduced={reduced} index={idx()} now={now} />,
+    build: () => (SITE.build ? <Build lang={lang} reduced={reduced} index={idx()} /> : null),
   };
   const wa = bi(SITE.waHello, lang);
 
@@ -98,7 +127,7 @@ export default function App() {
       </header>
 
       {/* hero: the scene stays pinned while the first scroll drives it */}
-      <section id="top" ref={stage} className="relative h-[175svh]">
+      <section id="top" ref={stage} className={`relative ${story ? (reduced ? "h-[100svh]" : "h-[440svh]") : "h-[175svh]"}`}>
         <div className="sticky top-0 h-[100dvh] overflow-hidden">
           {photo ? (
             <motion.img
@@ -158,9 +187,21 @@ export default function App() {
             </div>
           </motion.div>
 
+          {story && !reduced && (
+            <div className="pointer-events-none absolute inset-0 mx-auto max-w-[1400px] px-4 sm:px-8">
+              <div className="relative h-full pb-28 md:pb-0">
+                <div className="absolute inset-x-0 bottom-28 top-0 md:bottom-0">
+                  {STORY.map((c, i) => (
+                    <StoryChapter key={i} c={c} i={i} progress={scrollYProgress} lang={lang} right={right} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {photo && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg to-transparent" />}
           <motion.div style={{ opacity: cueOpacity }} className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[12px] tracking-[0.2em] text-ink-3 md:flex">
-            {t.scroll.toUpperCase()}
+            {(SITE.pour ? t.scrollPour : t.scroll).toUpperCase()}
             <span className="block h-10 w-px overflow-hidden bg-line">
               <motion.span className="block h-1/2 w-full bg-accent" animate={reduced ? undefined : { y: ["-100%", "200%"] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }} />
             </span>

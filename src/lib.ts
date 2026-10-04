@@ -1,7 +1,7 @@
 export type Lang = "en" | "hi";
 export type Bi = { en: string; hi: string };
-export type SceneKey = "salt" | "lanterns" | "tandoor" | "imarti" | "samosa" | "handi" | "chulha" | "road" | "cup" | "thali" | "celebration";
-export type SectionKey = "dishes" | "gallery" | "feature" | "reviews" | "visit";
+export type SceneKey = "salt" | "lanterns" | "tandoor" | "imarti" | "samosa" | "handi" | "chulha" | "road" | "cup" | "thali" | "celebration" | "pour";
+export type SectionKey = "dishes" | "gallery" | "feature" | "reviews" | "visit" | "build";
 /** Opening hours per weekday, Sunday first, as [open, close] in decimal hours. Close may pass 24 (1 AM = 25). */
 export type Hours = [number, number][];
 
@@ -48,6 +48,44 @@ export type Site = {
   visit: { title: Bi; img: string; alt: string; address: Bi; note?: Bi };
   waHello: Bi;
   order: SectionKey[];
+  /** Scroll story told over the hero scene: chapter 0 is the hero copy, these follow it. */
+  story?: Chapter[];
+  pour?: Pour;
+  build?: Build;
+};
+
+export type Chapter = { kicker: Bi; title: Bi; quote?: string };
+
+/** A scroll-scrubbed pour: a scanned jug or brass pan fills a vessel while the story plays. */
+export type Pour = {
+  from: "jug" | "pan";
+  into: "glass" | "kulhad" | "kadhai";
+  liquid: string;
+  /** Lighter tone for froth and the stream's highlights. */
+  foam: string;
+  /** Stream thickness: 1 is water-thin, 1.8 is a gravy. */
+  thick: number;
+  hot?: boolean;
+  ice?: boolean;
+  lime?: boolean;
+  /** A dollop of white butter that drops in once the pour is done. */
+  butter?: boolean;
+  /** Extra props around the vessel. */
+  extras?: "candles" | "handi";
+};
+
+/** Tap-to-build order or table request that ends in a pre-filled WhatsApp message. */
+export type Build = {
+  title: Bi;
+  body: Bi;
+  /** Order mode: dishes from the reviews with + / − counters. */
+  items?: Bi[];
+  /** Pick one: seating, occasion or thali. */
+  pick?: { label: Bi; options: { name: Bi; note?: Bi }[] };
+  people?: boolean;
+  when?: boolean;
+  /** Message opener, e.g. "Hi Rao Restaurant, I'd like to order". */
+  hello: Bi;
 };
 
 export type Feature =
@@ -115,6 +153,16 @@ export const UI = {
     lang: "Language",
     mapTitle: "Map",
     from: "from",
+    pick: "Pick one",
+    people: "People",
+    day: "Day",
+    time: "Time",
+    days: ["Today", "Tomorrow", "This weekend"],
+    times: ["Lunch", "Evening", "Dinner"],
+    send: "Send on WhatsApp",
+    empty: "Tap a dish to add it",
+    items: "Items",
+    scrollPour: "Scroll to pour",
   },
   hi: {
     open: (t: string) => `अभी खुला है · ${t} तक`,
@@ -135,5 +183,15 @@ export const UI = {
     lang: "भाषा",
     mapTitle: "नक्शा",
     from: "",
+    pick: "एक चुनिए",
+    people: "लोग",
+    day: "दिन",
+    time: "समय",
+    days: ["आज", "कल", "इस वीकेंड"],
+    times: ["दोपहर", "शाम", "रात"],
+    send: "व्हाट्सऐप पर भेजें",
+    empty: "डिश जोड़ने के लिए टैप करें",
+    items: "आइटम",
+    scrollPour: "नीचे स्क्रॉल करें",
   },
 };
