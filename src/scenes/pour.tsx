@@ -33,7 +33,7 @@ const lerpY = (pts: [number, number][]) => (y: number) => {
 const VESSELS: Record<Pour["into"], Vessel> = {
   glass: { top: 0.115, base: 0.012, r: lerpY([[0.012, 0.0305], [0.115, 0.0375]]), fill: [0.03, 0.094], land: 0.004, cam: 0.95, inset: 0.0006 },
   kulhad: { top: 0.085, base: 0.008, r: lerpY([[0.008, 0.022], [0.03, 0.028], [0.07, 0.0325], [0.085, 0.0335]]), fill: [0.024, 0.072], land: 0.003, cam: 0.9, inset: 0.0006 },
-  kadhai: { top: 0.108, base: 0.012, r: lerpY([[0.012, 0.118], [0.04, 0.13], [0.108, 0.145]]), fill: [0.032, 0.084], land: 0.03, cam: 1.2, inset: 0.004 },
+  kadhai: { top: 0.108, base: 0.012, r: lerpY([[0.012, 0.118], [0.04, 0.13], [0.108, 0.145]]), fill: [0.032, 0.084], land: 0.03, cam: 1.9, inset: 0.004 },
 };
 const V = VESSELS[POUR.into];
 
@@ -529,10 +529,12 @@ function Director({ progress, side, still, s, flames, vessel, rig }: Pick<SceneP
       cam.updateProjectionMatrix();
     }
     // on phones the frame is tall and thin: aim between the pourer and the vessel so both fit
-    const off = narrow ? -0.14 : (side === "left" ? -0.27 : 0.27) * V.cam * (1 - 0.45 * smooth(0.6, 1, P));
-    const dist = V.cam * (narrow ? 1.75 : 1) * (1 + (1 - s.intro) * 0.45 - 0.2 * smooth(0.25, 1, P));
+    // the pan's long handle needs a wider, more left-leaning phone frame than the jug
+    const pan = POUR.from === "pan";
+    const off = narrow ? -(POUR.into === "kadhai" ? 0.1 : pan ? 0.24 : 0.15) * V.cam : (side === "left" ? -0.27 : 0.27) * V.cam * (POUR.into === "kadhai" ? 0.8 : 1) * (1 - 0.45 * smooth(0.6, 1, P));
+    const dist = V.cam * (narrow ? (pan ? 2.3 : 1.75) : 1) * (1 + (1 - s.intro) * 0.45 - 0.2 * smooth(0.25, 1, P));
     const ang = (1 - s.intro) * -0.3 + 0.28 * smooth(0, 1, P) + (still ? 0 : pointer.x * 0.04);
-    const lookY = narrow ? 0.1 * V.cam - 0.1 : 0.15 * V.cam;
+    const lookY = (narrow ? -0.005 : 0.15) * V.cam;
     const elev = 0.24 - 0.08 * smooth(0.2, 1, P) + (still ? 0 : pointer.y * 0.02);
     want.set(off + Math.sin(ang) * dist * Math.cos(elev), lookY + Math.sin(elev) * dist, Math.cos(ang) * dist * Math.cos(elev));
     camera.position.lerp(want, still ? 1 : 1 - Math.pow(0.02, dt));
