@@ -128,15 +128,16 @@ export function Reviews({ lang, reduced, index }: P) {
   const r = SITE.reviews;
   const t = UI[lang];
   const total = r.dist.reduce((a, b) => a + b, 0);
+  const bgPhoto = r.bg ?? SITE.gallery.photos[1]?.src;
   return (
     <section className="relative overflow-hidden py-20 lg:py-32">
-      {r.bg && (
+      {bgPhoto && (
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <img src={r.bg} alt="" loading="lazy" className="h-full w-full object-cover opacity-30 blur-[2px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--bg),color-mix(in_oklab,var(--bg)_55%,transparent)_30%,color-mix(in_oklab,var(--bg)_55%,transparent)_70%,var(--bg))]" />
+          <img src={bgPhoto} alt="" loading="lazy" className="h-full w-full object-cover blur-[2px] brightness-[0.5] saturate-[0.85]" />
+          <div className="absolute inset-0 bg-bg/80" />
         </div>
       )}
-      <div className={`${WRAP} grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20`}>
+      <div className={`${WRAP} relative grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20`}>
         <div className="lg:sticky lg:top-28 lg:self-start">
           <Heading index={index} title={bi(r.title, lang)} reduced={reduced} />
           <div className="mt-10 flex items-end gap-4">
