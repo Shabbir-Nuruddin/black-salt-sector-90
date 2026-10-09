@@ -3,7 +3,7 @@ import { MapPin, Moon, Sun } from "@phosphor-icons/react";
 import { useState } from "react";
 import { SITE } from "../content";
 import { UI, bi, km, type Lang } from "../lib";
-import { EASE, Heading, Quote, Rise } from "./ui";
+import { EASE, Heading, Photo, Quote, Rise } from "./ui";
 
 type P = { lang: Lang; reduced: boolean; index: string };
 const WRAP = "relative mx-auto max-w-[1280px] px-4 sm:px-8";
@@ -21,20 +21,7 @@ export function Feature({ lang, reduced, index }: P) {
       return (
         <section className="relative overflow-hidden bg-bg-2 py-20 lg:py-32">
           <div className={`${WRAP} grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16`}>
-            <Rise reduced={reduced} className={`relative ${f.kind === "counter" ? "lg:order-2" : ""}`}>
-              <div className="overflow-hidden rounded-2xl border border-line">
-                <motion.img
-                  src={f.img}
-                  alt=""
-                  loading="lazy"
-                  className="aspect-[4/5] w-full object-cover sm:aspect-[4/3] lg:aspect-[4/5]"
-                  initial={reduced ? false : { scale: 1.12 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.6, ease: EASE }}
-                />
-              </div>
-            </Rise>
+            <Photo src={f.img} reduced={reduced} className={`aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] ${f.kind === "counter" ? "lg:order-2" : ""}`} />
             <div>
               <Heading index={index} title={bi(f.title, lang)} body={bi(f.body, lang)} reduced={reduced} />
               <ol className={`mt-10 ${f.kind === "thali" ? "grid gap-x-8 sm:grid-cols-2" : ""}`}>
@@ -62,9 +49,7 @@ export function Feature({ lang, reduced, index }: P) {
             <div>
               <Heading index={index} title={bi(f.title, lang)} body={bi(f.body, lang)} reduced={reduced} />
               {f.img && (
-                <Rise reduced={reduced} className="mt-10 overflow-hidden rounded-2xl border border-line">
-                  <img src={f.img} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
-                </Rise>
+                <Photo src={f.img} reduced={reduced} className="mt-10 aspect-[4/3]" />
               )}
             </div>
             <div className="space-y-4 lg:pt-24">

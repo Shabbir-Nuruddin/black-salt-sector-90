@@ -39,7 +39,7 @@ export type Site = {
   theme: Theme;
   scene: SceneKey;
   align: "left" | "right";
-  hero: { title: [Bi, Bi]; proof: Bi; fallback: string; /** Full-bleed restaurant photo behind a photoreal scene. */ backdrop?: string };
+  hero: { title: [Bi, Bi]; proof: Bi; fallback: string; /** Full-bleed restaurant photo behind a photoreal scene. */ backdrop?: string; /** Real photos the hero crossfades through. */ slides?: string[] };
   marquee: string[];
   dishes: { title: Bi; body: Bi; layout: "list" | "cards"; items: Dish[] };
   gallery: { title: Bi; layout: "strip" | "mosaic"; photos: Photo[] };
@@ -136,6 +136,8 @@ export const DAYS: Record<Lang, string[]> = {
 export const UI = {
   en: {
     open: (t: string) => `Open now · till ${t}`,
+    allday: "Open now · 24 hours",
+    h24: "Open 24 hours",
     closed: (t: string) => `Closed now · opens ${t}`,
     call: "Call to book",
     callShort: "Call",
@@ -166,6 +168,8 @@ export const UI = {
   },
   hi: {
     open: (t: string) => `अभी खुला है · ${t} तक`,
+    allday: "अभी खुला है · 24 घंटे",
+    h24: "24 घंटे खुला",
     closed: (t: string) => `अभी बंद है · ${t} खुलेगा`,
     call: "टेबल के लिए कॉल करें",
     callShort: "कॉल",

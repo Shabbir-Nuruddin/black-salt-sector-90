@@ -34,7 +34,6 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 6px;
 }
 a {
   text-underline-offset: 4px;
@@ -84,9 +83,3 @@ html[lang="hi"] .font-display {
   display: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track,
-  .live-dot::after {
-    animation: none;
-  }
-}

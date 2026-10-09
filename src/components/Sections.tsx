@@ -1,9 +1,9 @@
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { Clock, MapPin, Phone, Star } from "@phosphor-icons/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SITE } from "../content";
 import { DAYS, UI, bi, fmtHour, type Lang } from "../lib";
-import { CallButton, DirectionsButton, EASE, Heading, Quote, Rise, TEL, WaButton } from "./ui";
+import { CallButton, CountUp, DirectionsButton, EASE, Heading, Photo, Quote, Rise, TEL, WaButton } from "./ui";
 
 type P = { lang: Lang; reduced: boolean; index: string };
 const WRAP = "relative mx-auto max-w-[1280px] px-4 sm:px-8";
@@ -23,12 +23,8 @@ export function Dishes({ lang, reduced, index }: P) {
         <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:px-8 lg:mx-auto lg:grid lg:max-w-[1280px] lg:grid-cols-3 lg:overflow-visible">
           {d.items.map((it, i) => (
             <Rise key={it.name.en} reduced={reduced} delay={(i % 3) * 0.07} className="w-[78vw] shrink-0 snap-start sm:w-[360px] lg:w-auto">
-              <article className="group h-full overflow-hidden rounded-2xl border border-line bg-panel">
-                {it.img && (
-                  <div className="overflow-hidden">
-                    <img src={it.img} alt={bi(it.name, lang)} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]" />
-                  </div>
-                )}
+              <article className="group h-full overflow-hidden rounded-2xl border border-line bg-panel transition duration-300 hover:-translate-y-1 hover:border-ink-3">
+                {it.img && <Photo src={it.img} alt={bi(it.name, lang)} reduced={reduced} delay={(i % 3) * 0.08} className="aspect-[4/3] !rounded-none" />}
                 <div className="p-5">
                   <h3 className="font-display text-[26px] leading-tight">{bi(it.name, lang)}</h3>
                   <p className="mt-3 text-[16px] leading-snug text-ink-2">“{it.quote}”</p>
@@ -95,28 +91,53 @@ export function Gallery({ lang, reduced, index }: P) {
           <Heading index={index} title={bi(g.title, lang)} reduced={reduced} />
           <div className="mt-12 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] lg:grid-cols-4 lg:gap-4">
             {g.photos.map((p, i) => (
-              <Rise key={p.src} reduced={reduced} delay={(i % 4) * 0.05} className={p.wide ? "col-span-2 row-span-2" : ""}>
-                <div className="group h-full overflow-hidden rounded-2xl border border-line">
-                  <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
-                </div>
-              </Rise>
+              <Photo key={p.src} src={p.src} alt={p.alt} reduced={reduced} delay={(i % 4) * 0.08} className={p.wide ? "col-span-2 row-span-2" : ""} />
             ))}
           </div>
         </div>
       </section>
     );
+  return <Strip lang={lang} reduced={reduced} index={index} />;
+}
+
+function Strip({ lang, reduced, index }: P) {
+  const g = SITE.gallery;
+  const t = UI[lang];
+  const ref = useRef<HTMLElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const [dist, setDist] = useState(0);
+  useEffect(() => {
+    const measure = () => setDist(track.current && innerWidth >= 1024 ? Math.max(0, track.current.scrollWidth - innerWidth) : 0);
+    measure();
+    addEventListener("resize", measure);
+    return () => removeEventListener("resize", measure);
+  }, []);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
+  const pinned = dist > 0 && !reduced;
   return (
-    <section className="py-20 lg:py-28">
-      <div className={`${WRAP} flex items-end justify-between gap-6`}>
-        <Heading index={index} title={bi(g.title, lang)} reduced={reduced} />
-        <p className="hidden shrink-0 text-[14px] text-ink-3 md:block">{t.scroll} →</p>
-      </div>
-      <div ref={strip} className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:px-8 lg:px-[max(2rem,calc((100vw-1280px)/2+2rem))]">
-        {g.photos.map((p) => (
-          <figure key={p.src} className={`shrink-0 snap-start overflow-hidden rounded-2xl border border-line ${p.wide ? "w-[86vw] sm:w-[640px]" : "w-[70vw] sm:w-[380px]"}`}>
-            <img src={p.src} alt={p.alt} loading="lazy" className="h-[52vh] max-h-[520px] w-full object-cover" />
-          </figure>
-        ))}
+    <section ref={ref} className="relative" style={pinned ? { height: `calc(100vh + ${dist}px)` } : undefined}>
+      <div className={pinned ? "sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-24" : "py-20 lg:py-28"}>
+        <div className={`${WRAP} flex w-full items-end justify-between gap-6`}>
+          <Heading index={index} title={bi(g.title, lang)} reduced={reduced} />
+          <p className="hidden shrink-0 text-[14px] text-ink-3 md:block">{t.scroll} →</p>
+        </div>
+        <motion.div
+          ref={track}
+          style={pinned ? { x } : undefined}
+          className={`mt-10 flex gap-4 px-4 pb-2 sm:px-8 lg:px-[max(2rem,calc((100vw-1280px)/2+2rem))] ${pinned ? "w-max" : "no-scrollbar snap-x snap-mandatory overflow-x-auto"}`}
+        >
+          {g.photos.map((p, i) => (
+            <Photo
+              key={p.src}
+              src={p.src}
+              alt={p.alt}
+              reduced={reduced}
+              delay={Math.min(i, 3) * 0.1}
+              className={`h-[52vh] max-h-[520px] shrink-0 snap-start ${p.wide ? "w-[86vw] sm:w-[640px]" : "w-[70vw] sm:w-[380px]"}`}
+            />
+          ))}
+        </motion.div>
       </div>
     </section>
   );
@@ -128,20 +149,13 @@ export function Reviews({ lang, reduced, index }: P) {
   const r = SITE.reviews;
   const t = UI[lang];
   const total = r.dist.reduce((a, b) => a + b, 0);
-  const bgPhoto = r.bg ?? SITE.gallery.photos[1]?.src;
   return (
-    <section className="relative overflow-hidden py-20 lg:py-32">
-      {bgPhoto && (
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <img src={bgPhoto} alt="" loading="lazy" className="h-full w-full object-cover blur-[2px] brightness-[0.5] saturate-[0.85]" />
-          <div className="absolute inset-0 bg-bg/80" />
-        </div>
-      )}
+    <section className="relative overflow-hidden bg-bg-2 py-20 lg:py-32">
       <div className={`${WRAP} relative grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20`}>
         <div className="lg:sticky lg:top-28 lg:self-start">
           <Heading index={index} title={bi(r.title, lang)} reduced={reduced} />
           <div className="mt-10 flex items-end gap-4">
-            <span className="font-display text-[clamp(4.5rem,10vw,7rem)] leading-[0.8] tabular-nums">{r.rating.toFixed(1)}</span>
+            <span className="font-display text-[clamp(4.5rem,10vw,7rem)] leading-[0.8] tabular-nums"><CountUp to={r.rating} decimals={1} reduced={reduced} /></span>
             <span className="pb-1 text-[15px] leading-tight text-ink-2">
               {t.outOf}
               <br />
@@ -154,7 +168,7 @@ export function Reviews({ lang, reduced, index }: P) {
                 <span className="inline-flex items-center gap-1 tabular-nums text-ink-2">
                   {5 - i} <Star size={12} weight="fill" className="text-accent" />
                 </span>
-                <span className="h-1.5 overflow-hidden rounded-full bg-bg-2">
+                <span className="h-1.5 overflow-hidden rounded-full bg-line">
                   <motion.span
                     className="block h-full rounded-full bg-accent"
                     initial={reduced ? false : { width: 0 }}
@@ -202,9 +216,7 @@ export function Visit({ lang, reduced, index, now }: P & { now: Date }) {
       <div className={WRAP}>
         <Heading index={index} title={bi(v.title, lang)} reduced={reduced} />
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <Rise reduced={reduced} className="overflow-hidden rounded-2xl border border-line">
-            <img src={v.img} alt={v.alt} loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
-          </Rise>
+          <Photo src={v.img} alt={v.alt} reduced={reduced} className="aspect-[4/3] lg:aspect-auto" />
           <Rise reduced={reduced} delay={0.08} className="flex flex-col rounded-2xl border border-line bg-panel p-6 sm:p-8">
             <a href={TEL} className="inline-flex items-center gap-3 font-display text-[clamp(2rem,4.4vw,3.2rem)] leading-none tabular-nums hover:text-accent">
               <Phone size={28} weight="fill" className="shrink-0 text-accent" />
@@ -228,7 +240,7 @@ export function Visit({ lang, reduced, index, now }: P & { now: Date }) {
                           {isToday && <span className="ml-2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-on-accent">{t.today}</span>}
                         </td>
                         <td className="py-1 text-right tabular-nums">
-                          {fmtHour(r.h[0])} – {fmtHour(r.h[1])}
+                          {r.h[0] === 0 && r.h[1] === 24 ? t.h24 : <>{fmtHour(r.h[0])} – {fmtHour(r.h[1])}</>}
                         </td>
                       </tr>
                     );

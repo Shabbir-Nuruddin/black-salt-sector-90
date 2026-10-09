@@ -161,7 +161,7 @@ export function Build({ lang, reduced, index }: { lang: Lang; reduced: boolean; 
 
           {/* the ticket: fills as the guest taps, and is exactly what gets sent */}
           <Rise reduced={reduced} className="lg:sticky lg:top-32 lg:self-start">
-            <div className="rounded-3xl border border-line bg-panel p-6 shadow-[0_30px_80px_-40px_var(--accent)]">
+            <div className="rounded-3xl border border-line bg-panel p-6">
               <div className="flex items-center justify-between text-[12px] font-semibold tracking-[0.18em] text-ink-3">
                 <span>{SITE.name.toUpperCase()}</span>
                 <span className="tabular-nums text-accent">
@@ -199,9 +199,9 @@ export function Build({ lang, reduced, index }: { lang: Lang; reduced: boolean; 
                 href={waLink(msg)}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-full bg-wa py-4 text-[17px] font-semibold text-[#062a14] shadow-[0_16px_36px_-14px_rgb(37_211_102/0.7)] transition hover:-translate-y-0.5 active:scale-[0.98]"
+                className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-full bg-ink py-4 text-[17px] font-semibold text-bg outline-none transition-colors duration-300 hover:bg-accent focus-visible:bg-accent active:scale-[0.98]"
               >
-                <WhatsappLogo size={22} weight="fill" />
+                <WhatsappLogo size={22} weight="fill" className="text-wa" />
                 {t.send}
               </a>
             </div>
